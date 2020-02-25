@@ -28,7 +28,7 @@ func main() {
 	_, d := xtrain.Dims()
 	nn := neural.NewNN(LR, OUT, d, HIDDEN)
 
-	nn.Train(xtrain, ytrain, 2)
+	nn.Train(xtrain, ytrain, 3)
 
 	nn.Test(xtest, ytest)
 
