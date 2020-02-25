@@ -1,10 +1,12 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"math/rand"
 	"neural"
 	"neural/utils"
+	"os"
 	"runtime"
 	"time"
 )
@@ -19,10 +21,18 @@ func main() {
 	runtime.GOMAXPROCS(runtime.NumCPU())
 	rand.Seed(time.Now().UTC().UnixNano())
 
-	xtrain := utils.ReadDataset("/home/julius/code/golang/neural/data/xtrain.csv")
-	ytrain := utils.ReadDataset("/home/julius/code/golang/neural/data/ytrain.csv")
-	xtest := utils.ReadDataset("/home/julius/code/golang/neural/data/xtest.csv")
-	ytest := utils.ReadDataset("/home/julius/code/golang/neural/data/ytest.csv")
+	datadir := os.Getenv("DATADIR")
+	if datadir == "" {
+		fmt.Println("Set ENV variable DATADIR before running")
+		os.Exit(0)
+	}
+
+	args := os.Args[1:]
+
+	xtrain := utils.ReadDataset(datadir + "/" + "x" + args[0])
+	ytrain := utils.ReadDataset(datadir + "/" + "y" + args[0])
+	xtest := utils.ReadDataset(datadir + "/" + "x" + args[1])
+	ytest := utils.ReadDataset(datadir + "/" + "y" + args[1])
 
 	log.Println("Datasets read")
 	_, d := xtrain.Dims()
