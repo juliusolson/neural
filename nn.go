@@ -108,7 +108,7 @@ func (nn *Net) Train(X, Y *mat.Dense, epochs int) {
 	for e := 0; e < epochs; e++ {
 		for n, i := range indices {
 			if n%1000 == 0 {
-				fmt.Printf("\rEpoch 1, Progress:  %v / %v", n, N)
+				fmt.Printf("\rEpoch %v, Progress:  %v / %v", e+1, n, N)
 			}
 			x := mat.DenseCopyOf(X.RowView(i))
 			y := int(Y.At(i, 0))
@@ -117,9 +117,8 @@ func (nn *Net) Train(X, Y *mat.Dense, epochs int) {
 			nn.Backward(out, x, y)
 			nn.UpdateParams()
 		}
+		fmt.Printf("\n")
 	}
-	fmt.Println("")
-	fmt.Println("")
 }
 
 /*
@@ -138,16 +137,12 @@ func (nn *Net) Test(X, Y *mat.Dense) {
 		y := int(Y.At(n, 0))
 		out := nn.Forward(x)
 		pred := utils.Argmax(out.ColView(0))
-		fmt.Printf("pred: %v, real: %v \n", pred, y)
-
 		if pred == y {
 			corr++
-			corrMap[pred]++
 		}
 	}
 
 	fmt.Printf("Accuracy: %v", float64(corr)/float64(N))
-	fmt.Println(corrMap)
 }
 
 /*
